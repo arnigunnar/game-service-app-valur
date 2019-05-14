@@ -7,8 +7,9 @@ class GameList extends StatelessWidget {
   GameList(this._games);
 
   Widget _buildGameItem(BuildContext context, int index) {
-    return Card(
+    return Container(
       color: Color.fromARGB(255, 69, 84, 101),
+      margin: EdgeInsets.only(bottom: 8),
       child: Column(
         children: [
           
@@ -16,10 +17,11 @@ class GameList extends StatelessWidget {
             padding: EdgeInsets.only(top: 8),
             child: Center(
               child: Text(
-                "Knattspyrna / Meistaraflokkur karla / ${_games[index].tournament}",
+                "Knattspyrna  |  Meistaraflokkur karla  |  ${_games[index].tournament}".toUpperCase(),
                 style: TextStyle(
                   color: Colors.blueGrey,
-                  fontSize: 11,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
                 ),
               )
             )
@@ -30,14 +32,22 @@ class GameList extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text(_games[index].homeTeam, textAlign: TextAlign.right),
+                    Text(
+                      _games[index].homeTeam.toUpperCase(),
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 211, 211, 208),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )  
+                    ),
                   ],
                 ),
               ),
               Container(
-                width: 50,
-                height: 40,
+                width: 80,
+                height: 45,
                 child: Center(
                   child: Text(
                     _games[index].scoreHomeTeam.toString() + "-" + _games[index].scoreAwayTeam.toString(),
@@ -51,8 +61,16 @@ class GameList extends StatelessWidget {
               ),
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(_games[index].awayTeam, textAlign: TextAlign.right),
+                    Text(
+                      _games[index].awayTeam.toUpperCase(),
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 211, 211, 208),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )  
+                    ),
                   ],
                 ),
               ),
@@ -63,10 +81,11 @@ class GameList extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8),
             child: Center(
               child: Text(
-                "${_games[index].stadium} / 23. maí 2019 kl. 20:00",
+                "${_games[index].stadium}  |  23. maí 2019 kl. 20:00".toUpperCase(),
                 style: TextStyle(
                   color: Colors.blueGrey,
-                  fontSize: 11,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
                 ),
               )
             )
@@ -79,9 +98,13 @@ class GameList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: _buildGameItem,
-      itemCount: _games.length
+    return Container(
+      color: Color.fromARGB(255, 46, 58, 73),
+      padding: EdgeInsets.all(8),
+      child: ListView.builder(
+        itemBuilder: _buildGameItem,
+        itemCount: _games.length,
+      )
     );
   }
 }

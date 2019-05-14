@@ -12,7 +12,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: Text('Valur Game Service'),
+      title: Text('Allir leikir'),
     ),
     body: FutureBuilder<List<Game>>(
       future: gameApi.getGames(),
@@ -22,7 +22,9 @@ class _HomeState extends State<Home> {
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         } else {
-          return CircularProgressIndicator();
+          return Center(
+            child: CircularProgressIndicator(strokeWidth: 2)
+          );
         }
       }
     ),
