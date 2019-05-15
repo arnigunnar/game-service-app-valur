@@ -21,3 +21,32 @@ Future<List<Game>> getGames() async {
 
   return list;
 }
+
+Future<List<Game>> getAllGames(String direction) async {
+  List<Game> list;
+  final String base = "https://cc-game-service.azurewebsites.net";
+  final String url = base + "/api/teams/games/?offset=45&limit=3&direction=${direction.toLowerCase()}";
+
+  List<Map<String, dynamic>> data = [
+    { "teamId": 101, "gender": "male", "sport": "football" },
+    { "teamId": 101, "gender": "female", "sport": "football" }
+  ];
+
+  final response = await http.post(
+    Uri.parse(url),
+    body: json.encode(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  );
+
+  if (response.statusCode == 200) {
+    list = (json.decode(response.body) as List)
+      .map((data) => Game.fromJson(data))
+      .toList();
+  } else {
+    throw Exception("Failed to load games!");
+  }
+
+  return list;
+}

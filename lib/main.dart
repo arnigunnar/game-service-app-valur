@@ -3,6 +3,7 @@ import 'screens/home/home.dart';
 
 void main() => runApp(ValurGameService());
 
+
 class ValurGameService extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
