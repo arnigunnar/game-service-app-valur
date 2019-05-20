@@ -25,50 +25,48 @@ class _HomeState extends State<Home> {
     initializeDateFormatting();
   }
 
+
+
   Future<List<Game>> _getGames(direction) {
     return gameApi.getAllGames(direction);
   }
 
-  Widget _getButton(String text, bool isSelected, String direction) {
+  Widget _getButton(String text) {
     var mainColor = Color.fromARGB(140, 211, 211, 208);
-
-    if (isSelected) {
-      mainColor = Color.fromARGB(255, 211, 211, 208);
-    }
 
     return  FlatButton(
       onPressed: () {
-        onButtonPress(direction);
+        
       },
-      child: Text(
-        text,
-        style: TextStyle(
-          color: mainColor,
-        ),
-      ),
-      shape: Border.all(
-        width: 1.0,
-        color: mainColor,
-        style: BorderStyle.solid,
+
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.filter_list,
+            color: Colors.white,
+          ),
+          Text(
+            text,
+            style: TextStyle(
+              color: mainColor,
+            ),
+          )
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text('Allir leikir'),
-    ),
     body: FutureBuilder<List<Game>>(
       future: _getGames(_direction),
       builder: (context, snapshot) {
         var buttonBarContainer = ButtonBar(
-          alignment: MainAxisAlignment.spaceEvenly,
+          alignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            _getButton("BLANDAÐ", (_direction == "both"), "both"),
-            _getButton("ÚRSLIT", (_direction == "onlyresults"), "onlyresults"),
-            _getButton("NÆSTU LEIKIR", (_direction == "onlyfixtures"), "onlyfixtures"),
+            _getButton("Grein"),
+            _getButton("Flokkar"),
           ],
         );
 
@@ -81,8 +79,8 @@ class _HomeState extends State<Home> {
         }
 
         return Container(
-            color: Color.fromARGB(255, 46, 58, 73),
-            padding: EdgeInsets.all(8),
+            color: Color.fromARGB(255, 218, 25, 39),
+            padding: EdgeInsets.only(bottom: 8),
             child: Column(
               children: <Widget> [
                 buttonBarContainer,

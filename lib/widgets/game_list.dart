@@ -9,28 +9,39 @@ class GameList extends StatelessWidget {
 
   Widget _buildGameItem(BuildContext context, int index) {
     var game = _games[index];
-    var score = game.scoreHomeTeam.toString() + "-" + game.scoreAwayTeam.toString();
-
-    if (game.status == "") {
-      score = "-";
-    }
 
     return Container(
-      color: Color.fromARGB(255, 69, 84, 101),
+      color: Color.fromARGB(255, 240, 240, 240),
       margin: EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: 8),
       child: Column(
         children: [
+
           Container(
-            padding: EdgeInsets.only(top: 8),
-            child: Center(
-              child: Text(
-                "${_getSportString(game.sport)}  |  ${_getGenderString(game.gender)}  |  ${game.tournament}".toUpperCase(),
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
+            padding: EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    "${_getSportString(game.sport)}  |  ${_getGenderString(game.gender)}  |  ${game.tournament}".toUpperCase(),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 100, 31, 42),
+                      fontSize: 9,
+                    ),
+                  )
                 ),
-              )
+                Expanded(
+                  child: Text(
+                    "${game.stadium}  |  ${DateFormat("d. MMM HH:mm", "is").format(game.date)}".toUpperCase(),
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 100, 31, 42),
+                      fontSize: 9,
+                    ),
+                  )
+                ),
+              ],
             )
           ),
 
@@ -39,63 +50,85 @@ class GameList extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      game.homeTeam.toUpperCase(),
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 211, 211, 208),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      )  
+                    Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Text(
+                        game.homeTeam.toUpperCase(),
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 218, 25, 39),
+                          fontSize: 18,
+                        )  
+                      )
                     ),
                   ],
                 ),
               ),
               Container(
-                width: 80,
-                height: 45,
-                child: Center(
-                  child: Text(
-                    score,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 242, 122, 123),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold
+                width: 100,
+                height: 35,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 48,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 100, 31, 42),
+                        borderRadius: new BorderRadius.all(new Radius.circular(3)),
+                      ),
+                      margin: EdgeInsets.only(left: 2),
+                      child: Center(
+                        child: Text(
+                          game.scoreHomeTeam.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          )
+                        )
+                      )
+                    ),
+                    Container(
+                      width: 48,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 100, 31, 42),
+                        borderRadius: new BorderRadius.all(new Radius.circular(3)),
+                      ),
+                      margin: EdgeInsets.only(left: 2),
+                      child: Center(
+                        child: Text(
+                          game.scoreAwayTeam.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          )
+                        )
+                      )
                     )
-                  )
-                )
+                  ],
+                ),
               ),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                      game.awayTeam.toUpperCase(),
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 211, 211, 208),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      )  
+                    Container(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Text(
+                        game.awayTeam.toUpperCase(),
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 218, 25, 39),
+                          fontSize: 18,
+                        )  
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
-          ),
-
-          Container(
-            padding: EdgeInsets.only(bottom: 8),
-            child: Center(
-              child: Text(
-                "${game.stadium}  |  ${DateFormat("d. MMM HH:mm", "is").format(game.date)}".toUpperCase(),
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            )
           ),
 
         ],

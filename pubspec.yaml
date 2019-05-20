@@ -20,3 +20,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: Roboto Condensed
+      fonts:
+      - asset: fonts/RobotoCondensed-Regular.ttf
+      - asset: fonts/RobotoCondensed-Italic.ttf
+        style: italic

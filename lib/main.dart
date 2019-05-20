@@ -11,6 +11,7 @@ class ValurGameService extends StatelessWidget {
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
       primaryColor: Color.fromARGB(255, 218, 29, 35),
+      fontFamily: 'Roboto Condensed'
     ),
     home: Home()
   );
