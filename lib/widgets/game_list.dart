@@ -9,6 +9,15 @@ class GameList extends StatelessWidget {
 
   Widget _buildGameItem(BuildContext context, int index) {
     var game = _games[index];
+    var scoreWidgets = List<Widget>();
+
+    if (game.status == "completed") {
+      scoreWidgets.add(_getScoreBulletContainer(game.scoreHomeTeam.toString()));
+      scoreWidgets.add(_getScoreBulletContainer(game.scoreAwayTeam.toString()));
+    } else {
+      scoreWidgets.add(_getNotStartedBulletContainer());
+      scoreWidgets.add(_getNotStartedBulletContainer());
+    }
 
     return Container(
       color: Color.fromARGB(255, 240, 240, 240),
@@ -69,46 +78,7 @@ class GameList extends StatelessWidget {
                 width: 100,
                 height: 35,
                 child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 48,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 100, 31, 42),
-                        borderRadius: new BorderRadius.all(new Radius.circular(3)),
-                      ),
-                      margin: EdgeInsets.only(left: 2),
-                      child: Center(
-                        child: Text(
-                          game.scoreHomeTeam.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold
-                          )
-                        )
-                      )
-                    ),
-                    Container(
-                      width: 48,
-                      height: 35,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 100, 31, 42),
-                        borderRadius: new BorderRadius.all(new Radius.circular(3)),
-                      ),
-                      margin: EdgeInsets.only(left: 2),
-                      child: Center(
-                        child: Text(
-                          game.scoreAwayTeam.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold
-                          )
-                        )
-                      )
-                    )
-                  ],
+                  children: scoreWidgets,
                 ),
               ),
               Expanded(
@@ -169,6 +139,40 @@ class GameList extends StatelessWidget {
         return "";
     }
 
+  }
+
+  Widget _getScoreBulletContainer(String score) {
+    return Container(
+      width: 48,
+      height: 35,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 100, 31, 42),
+        borderRadius: new BorderRadius.all(new Radius.circular(3)),
+      ),
+      margin: EdgeInsets.only(left: 2),
+      child: Center(
+        child: Text(
+          score,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold
+          )
+        )
+      )
+    );
+  }
+
+  Widget _getNotStartedBulletContainer() {
+    return Container(
+      width: 48,
+      height: 35,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(45, 100, 31, 42),
+        borderRadius: new BorderRadius.all(new Radius.circular(3)),
+      ),
+      margin: EdgeInsets.only(left: 2),
+    );
   }
 
 }
