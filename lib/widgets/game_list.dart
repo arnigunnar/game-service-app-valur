@@ -20,7 +20,7 @@ class GameList extends StatelessWidget {
     }
 
     return Container(
-      color: Color.fromARGB(255, 240, 240, 240),
+      color: Colors.white,
       margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.only(bottom: 8),
       child: Column(
