@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import '../../models/game.dart';
+import '../../models/game_list_filtering_type.dart';
 import '../../services/get_all_games_request.dart';
 import '../../services/game_api.dart' as gameApi;
 import '../../widgets/game_list.dart';
+import 'settings_dialog.dart';
+
+
 
 class Home extends StatefulWidget {
   @override
@@ -13,27 +17,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _direction = "both";
-  var gamesRequestBody = List<GetAllGamesRequest>();
-
-
+  var _gamesRequestBody = List<GetAllGamesRequest>();
 
   @override
   void initState() {
-    // gamesRequestBody.add(GetAllGamesRequest(teamId: 111, gender: "male", sport: "football"));
-    // gamesRequestBody.add(GetAllGamesRequest(teamId: 111, gender: "female", sport: "football"));
+    _gamesRequestBody.add(GetAllGamesRequest(teamId: 101, gender: "male", sport: "football"));
+    _gamesRequestBody.add(GetAllGamesRequest(teamId: 101, gender: "female", sport: "football"));
 
     super.initState();
     initializeDateFormatting();
   }
 
-  Future<List<Game>> _getGames(direction) {
-    return gameApi.getAllGames(direction);
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      // title: Text("LEIKJAÞJÓNUSTA VALS"),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -48,7 +45,7 @@ class _HomeState extends State<Home> {
       elevation: 2,
     ),
     body: FutureBuilder<List<Game>>(
-      future: _getGames(_direction),
+      future: _getGames(_direction, _gamesRequestBody),
       builder: (context, snapshot) {
         var widgets = List<Widget>();
 
@@ -83,18 +80,16 @@ class _HomeState extends State<Home> {
         children: <Widget> [
           Row(
             children: <Widget>[
-              _getControl("Velja greinar"),
-              _getControl("Velja flokka"),
-              _getControl("Hvaða leiki viltu sjá?"),
+              _getControl("Velja greinar", gameListFilteringType.sport),
+              _getControl("Velja flokka", gameListFilteringType.category),
             ],
           ),
-
         ],
       ),
     );
   }
 
-  Widget _getControl(String label) {
+  Widget _getControl(String label, gameListFilteringType type) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(2),
@@ -106,14 +101,17 @@ class _HomeState extends State<Home> {
               style: TextStyle(fontSize: 10, color: Colors.grey ),
             ),
             RaisedButton(
-              onPressed: () {},
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => SettingsDialog(filterType: type),
+              ),
               elevation: 0,
               padding: EdgeInsets.all(5),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child:Text(
-                      "Úrslit og Næstu",
+                      (type == gameListFilteringType.sport ? "Íþróttagreinar" : "Flokkar"),
                       style: TextStyle(fontSize: 14),
                     )
                   ),
@@ -130,5 +128,92 @@ class _HomeState extends State<Home> {
       )
     );
   }
+
+  Future<List<Game>> _getGames(direction, body) {
+    return gameApi.getAllGames(direction, body);
+  }
+
+
+
+  // Future<void> _askForGameSelection(String label, buttonType type) async {
+  //     var _widgets = List<Widget>();
+
+  //     if (type == buttonType.sport) {
+  //       _widgets.add(Row(
+  //         children: <Widget>[
+  //           Checkbox(
+  //             value: true,
+  //             onChanged: (bool value) {
+                
+  //             },
+  //           ),
+  //           Text("Fótbolti"),
+  //         ],
+  //       ));
+  //       _widgets.add(Row(
+  //         children: <Widget>[
+  //           Checkbox(
+  //             value: true,
+  //             onChanged: (bool value) {
+                
+  //             },
+  //           ),
+  //           Text("Handbolti"),
+  //         ],
+  //       ));
+  //     } else if (type == buttonType.category) {
+  //       _widgets.add(Row(
+  //         children: <Widget>[
+  //           Checkbox(
+  //             value: _mflka,
+  //             onChanged: (bool value) {
+  //               print(value);
+  //               print(_mflka);
+  //               setState(() {
+  //                 _mflka = value;
+  //               });
+  //             },
+  //           ),
+  //           Text("Meistaraflokkur karla"),
+  //         ],
+  //       ));
+  //       _widgets.add(Row(
+  //         children: <Widget>[
+  //           Checkbox(
+  //             value: true,
+  //             onChanged: (bool value) {
+  //               print(value);
+  //             },
+  //           ),
+  //           Text("Meistaraflokkur kvenna"),
+  //         ],
+  //       ));
+  //     }
+
+  //     _widgets.add(
+  //       Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: <Widget> [
+  //           RaisedButton(
+  //             color: Color.fromARGB(255, 218, 29, 35),
+  //             textColor: Colors.white,
+  //             onPressed: () {},
+  //             child: Text("Vista stillingar")
+  //           )
+  //         ]
+  //       )
+  //     );
+
+  //     switch (await showDialog(context: context, builder: (BuildContext context) {
+  //       return SimpleDialog(
+  //         title: Text(label.toUpperCase()),
+  //         elevation: 2,
+  //         children: _widgets,
+  //       );
+  //     })) {
+  //       case "": _getGames("both", _gamesRequestBody); break;
+  //     }
+
+  // }
 
 }

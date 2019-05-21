@@ -1,0 +1,4 @@
+enum gameListFilteringType {
+  sport,
+  category
+}
