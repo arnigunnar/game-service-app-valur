@@ -8,8 +8,6 @@ import '../../services/game_api.dart' as gameApi;
 import '../../widgets/game_list.dart';
 import 'settings_dialog.dart';
 
-
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -18,11 +16,48 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _direction = "both";
   var _gamesRequestBody = List<GetAllGamesRequest>();
+  bool _football = true;
+  bool _handball = false;
+  bool _mflka = true;
+  bool _mflkv = true;
+
+  void onSettingsSave(List<bool> values, gameListFilteringType type) {
+    if (type == gameListFilteringType.sport) {
+      final body = _setRequestBody(values[0], values[1], _mflka, _mflkv);
+
+      setState(() {
+        _football = values[0];
+        _handball = values[1];
+        _gamesRequestBody = body;
+      });
+    } else if (type == gameListFilteringType.category) {
+      final body = _setRequestBody(_football, _handball, values[0], values[1]);
+
+      setState(() {
+        _mflka = values[0];
+        _mflkv = values[1];
+        _gamesRequestBody = body;
+      });
+    }
+  }
+
+  List<GetAllGamesRequest> _setRequestBody(bool football, bool handball, bool mflka, bool mflkv) {
+    var _body = List<GetAllGamesRequest>();
+
+    if (football && mflka) {
+      _body.add(GetAllGamesRequest(teamId: 101, gender: "male", sport: "football"));  
+    }
+  
+      if (football && mflkv) {
+      _body.add(GetAllGamesRequest(teamId: 101, gender: "female", sport: "football"));  
+    }
+
+    return _body;
+  }
 
   @override
   void initState() {
-    _gamesRequestBody.add(GetAllGamesRequest(teamId: 101, gender: "male", sport: "football"));
-    _gamesRequestBody.add(GetAllGamesRequest(teamId: 101, gender: "female", sport: "football"));
+    _gamesRequestBody = _setRequestBody(true, true, true, true);
 
     super.initState();
     initializeDateFormatting();
@@ -90,6 +125,16 @@ class _HomeState extends State<Home> {
   }
 
   Widget _getControl(String label, gameListFilteringType type) {
+    List<bool> setValues = [false, false];
+
+    if (type == gameListFilteringType.sport) {
+      setValues[0] = _football;
+      setValues[1] = _handball;
+    } else if (type == gameListFilteringType.category) {
+      setValues[0] = _mflka;
+      setValues[1] = _mflkv;
+    }
+
     return Expanded(
       child: Container(
         padding: EdgeInsets.all(2),
@@ -103,7 +148,7 @@ class _HomeState extends State<Home> {
             RaisedButton(
               onPressed: () => showDialog(
                 context: context,
-                builder: (context) => SettingsDialog(filterType: type),
+                builder: (context) => SettingsDialog(filterType: type, onSubmit: onSettingsSave, setValues: setValues),
               ),
               elevation: 0,
               padding: EdgeInsets.all(5),
@@ -132,88 +177,5 @@ class _HomeState extends State<Home> {
   Future<List<Game>> _getGames(direction, body) {
     return gameApi.getAllGames(direction, body);
   }
-
-
-
-  // Future<void> _askForGameSelection(String label, buttonType type) async {
-  //     var _widgets = List<Widget>();
-
-  //     if (type == buttonType.sport) {
-  //       _widgets.add(Row(
-  //         children: <Widget>[
-  //           Checkbox(
-  //             value: true,
-  //             onChanged: (bool value) {
-                
-  //             },
-  //           ),
-  //           Text("Fótbolti"),
-  //         ],
-  //       ));
-  //       _widgets.add(Row(
-  //         children: <Widget>[
-  //           Checkbox(
-  //             value: true,
-  //             onChanged: (bool value) {
-                
-  //             },
-  //           ),
-  //           Text("Handbolti"),
-  //         ],
-  //       ));
-  //     } else if (type == buttonType.category) {
-  //       _widgets.add(Row(
-  //         children: <Widget>[
-  //           Checkbox(
-  //             value: _mflka,
-  //             onChanged: (bool value) {
-  //               print(value);
-  //               print(_mflka);
-  //               setState(() {
-  //                 _mflka = value;
-  //               });
-  //             },
-  //           ),
-  //           Text("Meistaraflokkur karla"),
-  //         ],
-  //       ));
-  //       _widgets.add(Row(
-  //         children: <Widget>[
-  //           Checkbox(
-  //             value: true,
-  //             onChanged: (bool value) {
-  //               print(value);
-  //             },
-  //           ),
-  //           Text("Meistaraflokkur kvenna"),
-  //         ],
-  //       ));
-  //     }
-
-  //     _widgets.add(
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         children: <Widget> [
-  //           RaisedButton(
-  //             color: Color.fromARGB(255, 218, 29, 35),
-  //             textColor: Colors.white,
-  //             onPressed: () {},
-  //             child: Text("Vista stillingar")
-  //           )
-  //         ]
-  //       )
-  //     );
-
-  //     switch (await showDialog(context: context, builder: (BuildContext context) {
-  //       return SimpleDialog(
-  //         title: Text(label.toUpperCase()),
-  //         elevation: 2,
-  //         children: _widgets,
-  //       );
-  //     })) {
-  //       case "": _getGames("both", _gamesRequestBody); break;
-  //     }
-
-  // }
 
 }

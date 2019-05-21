@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../models/game_list_filtering_type.dart';
 
+typedef void SettingsDialogCallback(List<bool> values, gameListFilteringType type);
+
 class SettingsDialog extends StatefulWidget {
 
   final gameListFilteringType filterType;
+  final SettingsDialogCallback onSubmit;
+  final List<bool> setValues;
 
   SettingsDialog({
     Key key,
-    this.filterType
+    this.filterType,
+    this.onSubmit,
+    this.setValues,
   }) : super(key: key);
 
   @override
@@ -18,6 +24,12 @@ class SettingsDialog extends StatefulWidget {
 class _SettingsDialogState extends State<SettingsDialog> {
 
   List<bool> values = [true, true];
+
+  @override
+  void initState() {
+    values = widget.setValues;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +50,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
           RaisedButton(
             color: Color.fromARGB(255, 218, 29, 35),
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+              widget.onSubmit(values, widget.filterType);
+            },
             child: Text("Vista stillingar")
           )
         ]
