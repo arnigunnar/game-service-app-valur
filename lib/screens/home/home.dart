@@ -87,6 +87,9 @@ class _HomeState extends State<Home> {
         // GAME LIST CONTROLS:
         widgets.add(_getControls());
 
+        // DIRECTION SELECTOR:
+        widgets.add(_getDirectionControls());
+
         // GAME LIST OR LOADER:
         if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
           widgets.add(GameList(snapshot.data));
@@ -97,17 +100,18 @@ class _HomeState extends State<Home> {
         }
 
         return Container(
-            color: Color.fromARGB(255, 244, 244, 244),
-            padding: EdgeInsets.only(bottom: 8),
-            child: Column(
-              children: widgets
-            )
+          color: Color.fromARGB(255, 244, 244, 244),
+          padding: EdgeInsets.only(bottom: 8),
+          child: Column(
+            children: widgets
+          )
         );
 
       }
     ),
   );
 
+  // BUILD CONTROLS ON TOP OF GAME LIST:
   Widget _getControls() {
     return Container(
       padding: EdgeInsets.all(6),
@@ -124,6 +128,7 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // GET A SINGLE CONTROL:
   Widget _getControl(String label, gameListFilteringType type) {
     List<bool> setValues = [false, false];
 
@@ -174,6 +179,82 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // GET DIRECTION CONROLS:
+  Widget _getDirectionControls() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 8),
+      color: Color.fromARGB(255, 190, 190, 190),
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget> [
+            Expanded(
+              child: FlatButton(
+                onPressed: () {
+                  setState(() { _direction = "both"; });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: (_direction == "both" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
+                    width: 3,
+                  )
+                ),
+                child: Text(
+                  "BLANDAÐ",
+                  style: TextStyle(
+                    color: (_direction == "both" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
+                  )
+                )
+              )
+            ),
+            Expanded(
+              child:FlatButton(
+                onPressed: () {
+                  setState(() { _direction = "onlyresults"; });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: (_direction == "onlyresults" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
+                    width: 3,
+                  )
+                ),
+                child: Text(
+                  "NÝJUSTU ÚRSLIT",
+                  style: TextStyle(
+                    color: (_direction == "onlyresults" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
+                  )
+                )
+              )
+            ),
+            Expanded(
+              child:FlatButton(
+                onPressed: () {
+                  setState(() { _direction = "onlyfixtures"; });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: (_direction == "onlyfixtures" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
+                    width: 3,
+                  )
+                ),
+                child: Text(
+                  "NÆSTU LEIKIR",
+                  style: TextStyle(
+                    color: (_direction == "onlyfixtures" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
+                  )
+                )
+              )
+            ),
+          ]
+        ),
+      )
+    );
+  }
+
+  // LOAD GAMES FROM API:
   Future<List<Game>> _getGames(direction, body) {
     return gameApi.getAllGames(direction, body);
   }
