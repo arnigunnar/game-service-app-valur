@@ -1,4 +1,4 @@
-# valur_game_service_app
+# game_service_app_valur
 
 A new Flutter project.
 

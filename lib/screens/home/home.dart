@@ -92,11 +92,18 @@ class _HomeState extends State<Home> {
 
         // GAME LIST OR LOADER:
         if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-          widgets.add(GameList(snapshot.data));
+          widgets.add(
+            Expanded(
+              child: GameList(snapshot.data))
+            );
         } else {
-          widgets.add(Center(
-            child: CircularProgressIndicator()
-          ));
+          widgets.add(
+            Expanded(
+              child: Center(
+                child: CircularProgressIndicator()
+              )
+            )
+          );
         }
 
         return Container(

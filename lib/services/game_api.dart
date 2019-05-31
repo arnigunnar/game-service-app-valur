@@ -8,7 +8,7 @@ import 'get_all_games_request.dart';
 Future<List<Game>> getAllGames(String direction, List<GetAllGamesRequest> body) async {
   List<Game> list;
   final String base = "https://cc-game-service.azurewebsites.net";
-  final String url = base + "/api/teams/games/?offset=45&limit=3&direction=${direction.toLowerCase()}";
+  final String url = base + "/api/teams/games/?offset=45&limit=4&direction=${direction.toLowerCase()}";
 
   var data = List<Map<String, dynamic>>();
 

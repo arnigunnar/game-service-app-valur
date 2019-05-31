@@ -1,6 +1,6 @@
 name: valur_game_service_app
-description: A new Flutter project.
-version: 1.0.0+1
+description: Live game service for Valur Football Club
+version: 1.0.2+3
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

@@ -108,13 +108,10 @@ class GameList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: _buildGameItem,
-        itemCount: _games.length,
-      )
+    return ListView.builder(
+      shrinkWrap: true,
+      itemBuilder: _buildGameItem,
+      itemCount: _games.length,
     );
   }
 
