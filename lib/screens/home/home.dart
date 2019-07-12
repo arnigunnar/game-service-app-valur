@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import '../../models/userSettings.dart';
 import '../../models/game.dart';
 import '../../models/game_list_filtering_type.dart';
 import '../../services/get_all_games_request.dart';
@@ -16,48 +17,49 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _direction = "both";
   var _gamesRequestBody = List<GetAllGamesRequest>();
-  bool _football = true;
-  bool _handball = false;
-  bool _mflka = true;
-  bool _mflkv = true;
+  var _settings = new UserSettings.init();
 
   void onSettingsSave(List<bool> values, gameListFilteringType type) {
+    var currentSettings = _settings;
+
     if (type == gameListFilteringType.sport) {
-      final body = _setRequestBody(values[0], values[1], _mflka, _mflkv);
-
-      setState(() {
-        _football = values[0];
-        _handball = values[1];
-        _gamesRequestBody = body;
-      });
+      currentSettings.sport.football = values[0];
+      currentSettings.sport.handball = values[1];
+    } else if (type == gameListFilteringType.gender) {
+      currentSettings.gender.female = values[0];
+      currentSettings.gender.male = values[1];
     } else if (type == gameListFilteringType.category) {
-      final body = _setRequestBody(_football, _handball, values[0], values[1]);
-
-      setState(() {
-        _mflka = values[0];
-        _mflkv = values[1];
-        _gamesRequestBody = body;
-      });
+      currentSettings.ageGroup.premier = values[0];
+      currentSettings.ageGroup.under23 = values[1];
+      currentSettings.ageGroup.group1 = values[2];
+      currentSettings.ageGroup.group2 = values[3];
+      currentSettings.ageGroup.group3 = values[4];
+      currentSettings.ageGroup.group4 = values[5];
+      currentSettings.ageGroup.group5 = values[6];
     }
+
+    currentSettings.calculateComplete();
+
+    setState(() {
+      _settings = currentSettings;
+      _gamesRequestBody = _setRequestBody();
+    });
   }
 
-  List<GetAllGamesRequest> _setRequestBody(bool football, bool handball, bool mflka, bool mflkv) {
+  List<GetAllGamesRequest> _setRequestBody() {
     var _body = List<GetAllGamesRequest>();
 
-    if (football && mflka) {
-      _body.add(GetAllGamesRequest(teamId: 101, gender: "male", sport: "football"));  
-    }
-  
-      if (football && mflkv) {
-      _body.add(GetAllGamesRequest(teamId: 101, gender: "female", sport: "football"));  
-    }
+    // CREATE BODY FOR API:
+    _settings.completes.forEach((item) => 
+      _body.add(GetAllGamesRequest(teamId: item[0], sport: item[1], gender: item[2], age: item[3]))
+    );
 
     return _body;
   }
 
   @override
   void initState() {
-    _gamesRequestBody = _setRequestBody(true, true, true, true);
+    _gamesRequestBody = _setRequestBody();
 
     super.initState();
     initializeDateFormatting();
@@ -127,6 +129,7 @@ class _HomeState extends State<Home> {
           Row(
             children: <Widget>[
               _getControl("Velja greinar", gameListFilteringType.sport),
+              _getControl("Velja kyn", gameListFilteringType.gender),
               _getControl("Velja flokka", gameListFilteringType.category),
             ],
           ),
@@ -137,14 +140,26 @@ class _HomeState extends State<Home> {
 
   // GET A SINGLE CONTROL:
   Widget _getControl(String label, gameListFilteringType type) {
-    List<bool> setValues = [false, false];
+    List<bool> setValues = [false, false, false, false, false, false, false];
+    String boxText = "";
 
     if (type == gameListFilteringType.sport) {
-      setValues[0] = _football;
-      setValues[1] = _handball;
+      setValues[0] = _settings.sport.football;
+      setValues[1] = _settings.sport.handball;
+      boxText = "Íþróttagreinar";
+    } else if (type == gameListFilteringType.gender) {
+      setValues[0] = _settings.gender.female;
+      setValues[1] = _settings.gender.male;
+      boxText = "Kyn";
     } else if (type == gameListFilteringType.category) {
-      setValues[0] = _mflka;
-      setValues[1] = _mflkv;
+      setValues[0] = _settings.ageGroup.premier;
+      setValues[1] = _settings.ageGroup.under23;
+      setValues[2] = _settings.ageGroup.group1;
+      setValues[3] = _settings.ageGroup.group2;
+      setValues[4] = _settings.ageGroup.group3;
+      setValues[5] = _settings.ageGroup.group4;
+      setValues[6] = _settings.ageGroup.group5;
+      boxText = "Flokkar";
     }
 
     return Expanded(
@@ -160,7 +175,10 @@ class _HomeState extends State<Home> {
             RaisedButton(
               onPressed: () => showDialog(
                 context: context,
-                builder: (context) => SettingsDialog(filterType: type, onSubmit: onSettingsSave, setValues: setValues),
+                builder: (context) => SettingsDialog(
+                  filterType: type,
+                  onSubmit: onSettingsSave, setValues: setValues
+                ),
               ),
               elevation: 0,
               padding: EdgeInsets.all(5),
@@ -168,7 +186,7 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   Expanded(
                     child:Text(
-                      (type == gameListFilteringType.sport ? "Íþróttagreinar" : "Flokkar"),
+                      boxText,
                       style: TextStyle(fontSize: 14),
                     )
                   ),
@@ -263,7 +281,7 @@ class _HomeState extends State<Home> {
 
   // LOAD GAMES FROM API:
   Future<List<Game>> _getGames(direction, body) {
-    return gameApi.getAllGames(direction, body);
+    return gameApi.getAllGames(direction, body, _settings.gameCount);
   }
 
 }

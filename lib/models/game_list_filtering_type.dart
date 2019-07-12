@@ -1,4 +1,5 @@
 enum gameListFilteringType {
   sport,
-  category
+  gender,
+  category,
 }

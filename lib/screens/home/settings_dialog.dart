@@ -38,9 +38,17 @@ class _SettingsDialogState extends State<SettingsDialog> {
     if (widget.filterType == gameListFilteringType.sport) {
       _widgets.add(_getCheckBox(0, "Fótbolti"));
       _widgets.add(_getCheckBox(1, "Handbolti"));
+    } else if (widget.filterType == gameListFilteringType.gender) {
+      _widgets.add(_getCheckBox(0, "Konur"));
+      _widgets.add(_getCheckBox(1, "Karlar"));
     } else if (widget.filterType == gameListFilteringType.category) {
-      _widgets.add(_getCheckBox(0, "Meistaraflokkur karla"));
-      _widgets.add(_getCheckBox(1, "Meistaraflokkur kvenna"));
+      _widgets.add(_getCheckBox(0, "Meistaraflokkur"));
+      _widgets.add(_getCheckBox(1, "U 23"));
+      _widgets.add(_getCheckBox(2, "1. flokkur"));
+      _widgets.add(_getCheckBox(3, "2. flokkur"));
+      _widgets.add(_getCheckBox(4, "3. flokkur"));
+      _widgets.add(_getCheckBox(5, "4. flokkur"));
+      _widgets.add(_getCheckBox(6, "5. flokkur"));
     }
 
     _widgets.add(

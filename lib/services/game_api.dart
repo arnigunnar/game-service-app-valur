@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import '../models/game.dart';
 import 'get_all_games_request.dart';
 
-Future<List<Game>> getAllGames(String direction, List<GetAllGamesRequest> body) async {
+Future<List<Game>> getAllGames(String direction, List<GetAllGamesRequest> body, int gameCount) async {
   List<Game> list;
   final String base = "https://cc-game-service.azurewebsites.net";
-  final String url = base + "/api/teams/games/?offset=45&limit=4&direction=${direction.toLowerCase()}";
+  final String url = base + "/api/teams/games/?offset=90&limit=${gameCount}&direction=${direction.toLowerCase()}";
 
   var data = List<Map<String, dynamic>>();
 
