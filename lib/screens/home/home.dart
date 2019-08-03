@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/userSettings.dart';
 import '../../models/game.dart';
@@ -21,13 +22,20 @@ class _HomeState extends State<Home> {
 
   void onSettingsSave(List<bool> values, gameListFilteringType type) {
     var currentSettings = _settings;
+    var keyToSave, stringToSave;
 
     if (type == gameListFilteringType.sport) {
       currentSettings.sport.football = values[0];
       currentSettings.sport.handball = values[1];
+
+      keyToSave = "pref_sports";
+      stringToSave = (values[0] ? "1" : "0") + "," + (values[1] ? "1" : "0");
     } else if (type == gameListFilteringType.gender) {
       currentSettings.gender.female = values[0];
       currentSettings.gender.male = values[1];
+
+      keyToSave = "pref_genders";
+      stringToSave = (values[0] ? "1" : "0") + "," + (values[1] ? "1" : "0");
     } else if (type == gameListFilteringType.category) {
       currentSettings.ageGroup.premier = values[0];
       currentSettings.ageGroup.under23 = values[1];
@@ -36,10 +44,22 @@ class _HomeState extends State<Home> {
       currentSettings.ageGroup.group3 = values[4];
       currentSettings.ageGroup.group4 = values[5];
       currentSettings.ageGroup.group5 = values[6];
+
+      keyToSave = "pref_age_groups";
+      stringToSave = (values[0] ? "1" : "0") + "," +
+        (values[1] ? "1" : "0") + "," +
+        (values[2] ? "1" : "0") + "," +
+        (values[3] ? "1" : "0") + "," +
+        (values[4] ? "1" : "0") + "," +
+        (values[5] ? "1" : "0") + "," +
+        (values[6] ? "1" : "0");
     }
 
-    currentSettings.calculateComplete();
+    // SAVE STATE TO DEVICE:
+    saveSettings(keyToSave, stringToSave);
 
+    // SET STATE:
+    currentSettings.calculateComplete();
     setState(() {
       _settings = currentSettings;
       _gamesRequestBody = _setRequestBody();
@@ -59,10 +79,11 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    _gamesRequestBody = _setRequestBody();
-
     super.initState();
     initializeDateFormatting();
+    loadSettings();
+
+    _gamesRequestBody = _setRequestBody();
   }
 
   @override
@@ -282,6 +303,33 @@ class _HomeState extends State<Home> {
   // LOAD GAMES FROM API:
   Future<List<Game>> _getGames(direction, body) {
     return gameApi.getAllGames(direction, body, _settings.gameCount);
+  }
+
+  // LOAD SETTINGS IF FOUND:
+  void loadSettings() async {
+    List<String> sports = await _getByKey("pref_sports");
+    List<String> genders = await _getByKey("pref_genders");
+    List<String> ageGroups = await _getByKey("pref_age_groups");
+
+    _settings.load(sports, genders, ageGroups);
+  }
+
+  void saveSettings(String key, String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, value);
+  }
+
+  // GET VALUE FROM SETTINGS:
+  Future<List<String>> _getByKey(String key) async {
+    List<String> array = List<String>();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefsValue = (prefs.getString(key) ?? "");
+
+    if (prefsValue != "") {
+      array = prefsValue.split(",");
+    }
+
+    return array;
   }
 
 }

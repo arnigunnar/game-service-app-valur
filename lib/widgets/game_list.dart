@@ -10,8 +10,9 @@ class GameList extends StatelessWidget {
   Widget _buildGameItem(BuildContext context, int index) {
     var game = _games[index];
     var scoreWidgets = List<Widget>();
+    var now = DateTime.now().add(Duration(hours: 3));
 
-    if (game.status == "completed") {
+    if (game.status == "completed" || now.isAfter(game.date)) {
       scoreWidgets.add(_getScoreBulletContainer(game.scoreHomeTeam.toString()));
       scoreWidgets.add(_getScoreBulletContainer(game.scoreAwayTeam.toString()));
     } else {

@@ -1,3 +1,6 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:valur_game_service_app/models/game_list_filtering_type.dart';
+
 class UserSettings {
 
   Sport sport;
@@ -15,13 +18,12 @@ class UserSettings {
   });
 
   UserSettings.init() {
-
     this.gameCount = 3;
     this.completes = new List<List<String>>();
 
     this.sport = new Sport(
       football: true,
-      handball: true
+      handball: true,
     );
 
     this.gender = new Gender(
@@ -31,16 +33,15 @@ class UserSettings {
 
     this.ageGroup = new AgeGroup(
       premier: true,
-      under23: true,
-      group1: true,
-      group2: true,
-      group3: true,
-      group4: true,
-      group5: true,
+      under23: false,
+      group1: false,
+      group2: false,
+      group3: false,
+      group4: false,
+      group5: false,
     );
 
     this.calculateComplete();
-
   }
 
   void calculateComplete() {
@@ -82,6 +83,36 @@ class UserSettings {
     if (this.sport.handball && this.gender.male && this.ageGroup.group4) { this.completes.add(["101", "handball", "male", "114"]); }
     if (this.sport.handball && this.gender.male && this.ageGroup.group5) { this.completes.add(["101", "handball", "male", "420"]); }
 
+  }
+
+  void load(List<String> sports, List<String> genders, List<String> ageGroups) {
+    if (sports.length > 0) {
+      this.sport = new Sport(
+        football: sports[0] == "1",
+        handball: sports[1] == "1"
+      );
+    }
+
+    if (genders.length > 0) {
+      this.gender = new Gender(
+        female: genders[0] == "1",
+        male: genders[1] == "1",
+      );
+    }
+
+    if (ageGroups.length > 0) {
+      this.ageGroup = new AgeGroup(
+        premier: ageGroups[0] == "1",
+        under23: ageGroups[1] == "1",
+        group1: ageGroups[2] == "1",
+        group2: ageGroups[3] == "1",
+        group3: ageGroups[4] == "1",
+        group4: ageGroups[5] == "1",
+        group5: ageGroups[6] == "1",
+      );
+    }
+
+    this.calculateComplete();
   }
 
 }
