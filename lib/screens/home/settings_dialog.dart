@@ -68,10 +68,16 @@ class _SettingsDialogState extends State<SettingsDialog> {
       )
     );
 
+    var header = "";
+
+    switch (widget.filterType) {
+      case gameListFilteringType.sport: header = "ÍÞRÓTTAGREINAR"; break;
+      case gameListFilteringType.gender: header = "KYN"; break;
+      case gameListFilteringType.category: header = "FLOKKAR"; break;
+    }
+
     return SimpleDialog(
-      title: Text(
-        (widget.filterType == gameListFilteringType.sport ? "ÍÞRÓTTAGREINAR" : "FLOKKAR")
-      ),
+      title: Text(header),
       children: _widgets,
     );
   }
