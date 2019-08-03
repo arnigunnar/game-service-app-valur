@@ -1,6 +1,6 @@
 name: valur_game_service_app
 description: Live game service for Valur Football Club
-version: 1.0.2+3
+version: 1.0.3+4
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
