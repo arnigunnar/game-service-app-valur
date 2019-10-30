@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _direction = "both";
+  String _direction = "onlyfixtures";
   var _gamesRequestBody = List<GetAllGamesRequest>();
   var _settings = new UserSettings.init();
 
@@ -114,11 +114,22 @@ class _HomeState extends State<Home> {
         widgets.add(_getDirectionControls());
 
         // GAME LIST OR LOADER:
-        if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-          widgets.add(
-            Expanded(
-              child: GameList(snapshot.data))
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            widgets.add(
+              Expanded(
+                child: GameList(snapshot.data)
+              )
             );
+          } else {
+            widgets.add(
+              Expanded(
+                child: Center(
+                  child: Text("Engir leikir fundust ...")
+                )
+              )
+            );
+          }
         } else {
           widgets.add(
             Expanded(
@@ -234,6 +245,28 @@ class _HomeState extends State<Home> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget> [
+
+            Expanded(
+              child:FlatButton(
+                onPressed: () {
+                  setState(() { _direction = "onlyfixtures"; });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: (_direction == "onlyfixtures" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
+                    width: 3,
+                  )
+                ),
+                child: Text(
+                  "NÆSTU LEIKIR",
+                  style: TextStyle(
+                    color: (_direction == "onlyfixtures" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
+                  )
+                )
+              )
+            ),
+
             Expanded(
               child: FlatButton(
                 onPressed: () {
@@ -254,6 +287,7 @@ class _HomeState extends State<Home> {
                 )
               )
             ),
+
             Expanded(
               child:FlatButton(
                 onPressed: () {
@@ -270,26 +304,6 @@ class _HomeState extends State<Home> {
                   "NÝJUSTU ÚRSLIT",
                   style: TextStyle(
                     color: (_direction == "onlyresults" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
-                  )
-                )
-              )
-            ),
-            Expanded(
-              child:FlatButton(
-                onPressed: () {
-                  setState(() { _direction = "onlyfixtures"; });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: (_direction == "onlyfixtures" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
-                    width: 3,
-                  )
-                ),
-                child: Text(
-                  "NÆSTU LEIKIR",
-                  style: TextStyle(
-                    color: (_direction == "onlyfixtures" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
                   )
                 )
               )

@@ -66,22 +66,22 @@ class UserSettings {
     if (this.sport.football && this.gender.male && this.ageGroup.group5) { this.completes.add(["101", "football", "male", "420"]); }
 
     // HANDBALL - FEMALE:
-    if (this.sport.handball && this.gender.female && this.ageGroup.premier) { this.completes.add(["101", "handball", "female", "111"]); }
-    if (this.sport.handball && this.gender.female && this.ageGroup.under23) { this.completes.add(["101", "handball", "female", "108"]); }
-    if (this.sport.handball && this.gender.female && this.ageGroup.group1) { this.completes.add(["101", "handball", "female", "113"]); }
-    if (this.sport.handball && this.gender.female && this.ageGroup.group2) { this.completes.add(["101", "handball", "female", "109"]); }
-    if (this.sport.handball && this.gender.female && this.ageGroup.group3) { this.completes.add(["101", "handball", "female", "124"]); }
-    if (this.sport.handball && this.gender.female && this.ageGroup.group4) { this.completes.add(["101", "handball", "female", "114"]); }
-    if (this.sport.handball && this.gender.female && this.ageGroup.group5) { this.completes.add(["101", "handball", "female", "420"]); }
+    if (this.sport.handball && this.gender.female && this.ageGroup.premier) { this.completes.add(["453", "handball", "female", "111"]); }
+    //if (this.sport.handball && this.gender.female && this.ageGroup.under23) { this.completes.add(["453", "handball", "female", "108"]); }
+    if (this.sport.handball && this.gender.female && this.ageGroup.group1) { this.completes.add(["453", "handball", "female", "113"]); }
+    if (this.sport.handball && this.gender.female && this.ageGroup.group2) { this.completes.add(["453", "handball", "female", "109"]); }
+    if (this.sport.handball && this.gender.female && this.ageGroup.group3) { this.completes.add(["453", "handball", "female", "124"]); }
+    if (this.sport.handball && this.gender.female && this.ageGroup.group4) { this.completes.add(["453", "handball", "female", "114"]); }
+    //if (this.sport.handball && this.gender.female && this.ageGroup.group5) { this.completes.add(["453", "handball", "female", "420"]); }
 
     // HANDBALL - MALE:
-    if (this.sport.handball && this.gender.male && this.ageGroup.premier) { this.completes.add(["101", "handball", "male", "111"]); }
-    if (this.sport.handball && this.gender.male && this.ageGroup.under23) { this.completes.add(["101", "handball", "male", "108"]); }
-    if (this.sport.handball && this.gender.male && this.ageGroup.group1) { this.completes.add(["101", "handball", "male", "113"]); }
-    if (this.sport.handball && this.gender.male && this.ageGroup.group2) { this.completes.add(["101", "handball", "male", "109"]); }
-    if (this.sport.handball && this.gender.male && this.ageGroup.group3) { this.completes.add(["101", "handball", "male", "124"]); }
-    if (this.sport.handball && this.gender.male && this.ageGroup.group4) { this.completes.add(["101", "handball", "male", "114"]); }
-    if (this.sport.handball && this.gender.male && this.ageGroup.group5) { this.completes.add(["101", "handball", "male", "420"]); }
+    if (this.sport.handball && this.gender.male && this.ageGroup.premier) { this.completes.add(["453", "handball", "male", "111"]); }
+    //if (this.sport.handball && this.gender.male && this.ageGroup.under23) { this.completes.add(["453", "handball", "male", "108"]); }
+    if (this.sport.handball && this.gender.male && this.ageGroup.group1) { this.completes.add(["453", "handball", "male", "113"]); }
+    if (this.sport.handball && this.gender.male && this.ageGroup.group2) { this.completes.add(["453", "handball", "male", "109"]); }
+    if (this.sport.handball && this.gender.male && this.ageGroup.group3) { this.completes.add(["453", "handball", "male", "124"]); }
+    if (this.sport.handball && this.gender.male && this.ageGroup.group4) { this.completes.add(["453", "handball", "male", "114"]); }
+    //if (this.sport.handball && this.gender.male && this.ageGroup.group5) { this.completes.add(["453", "handball", "male", "420"]); }
 
   }
 
