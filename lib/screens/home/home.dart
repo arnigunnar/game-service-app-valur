@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _direction = "onlyfixtures";
+  String _direction = "both";
   var _gamesRequestBody = List<GetAllGamesRequest>();
   var _settings = new UserSettings.init();
 
@@ -46,13 +46,19 @@ class _HomeState extends State<Home> {
       currentSettings.ageGroup.group5 = values[6];
 
       keyToSave = "pref_age_groups";
-      stringToSave = (values[0] ? "1" : "0") + "," +
-        (values[1] ? "1" : "0") + "," +
-        (values[2] ? "1" : "0") + "," +
-        (values[3] ? "1" : "0") + "," +
-        (values[4] ? "1" : "0") + "," +
-        (values[5] ? "1" : "0") + "," +
-        (values[6] ? "1" : "0");
+      stringToSave = (values[0] ? "1" : "0") +
+          "," +
+          (values[1] ? "1" : "0") +
+          "," +
+          (values[2] ? "1" : "0") +
+          "," +
+          (values[3] ? "1" : "0") +
+          "," +
+          (values[4] ? "1" : "0") +
+          "," +
+          (values[5] ? "1" : "0") +
+          "," +
+          (values[6] ? "1" : "0");
     }
 
     // SAVE STATE TO DEVICE:
@@ -70,9 +76,8 @@ class _HomeState extends State<Home> {
     var _body = List<GetAllGamesRequest>();
 
     // CREATE BODY FOR API:
-    _settings.completes.forEach((item) => 
-      _body.add(GetAllGamesRequest(teamId: item[0], sport: item[1], gender: item[2], age: item[3]))
-    );
+    _settings.completes.forEach((item) => _body.add(GetAllGamesRequest(
+        teamId: item[0], sport: item[1], gender: item[2], age: item[3])));
 
     return _body;
   }
@@ -88,76 +93,57 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text("LEIKJAÞJÓNUSTA VALS"),
-          Image.asset(
-            "assets/logo.png",
-            fit: BoxFit.contain,
-            height: 30,
-          )
-        ],
-      ),
-      elevation: 2,
-    ),
-    body: FutureBuilder<List<Game>>(
-      future: _getGames(_direction, _gamesRequestBody),
-      builder: (context, snapshot) {
-        var widgets = List<Widget>();
-
-        // GAME LIST CONTROLS:
-        widgets.add(_getControls());
-
-        // DIRECTION SELECTOR:
-        widgets.add(_getDirectionControls());
-
-        // GAME LIST OR LOADER:
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            widgets.add(
-              Expanded(
-                child: GameList(snapshot.data)
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("LEIKJAÞJÓNUSTA VALS"),
+              Image.asset(
+                "assets/logo.png",
+                fit: BoxFit.contain,
+                height: 30,
               )
-            );
-          } else {
-            widgets.add(
-              Expanded(
-                child: Center(
-                  child: Text("Engir leikir fundust ...")
-                )
-              )
-            );
-          }
-        } else {
-          widgets.add(
-            Expanded(
-              child: Center(
-                child: CircularProgressIndicator()
-              )
-            )
-          );
-        }
+            ],
+          ),
+          elevation: 2,
+        ),
+        body: FutureBuilder<List<Game>>(
+            future: _getGames(_direction, _gamesRequestBody),
+            builder: (context, snapshot) {
+              var widgets = List<Widget>();
 
-        return Container(
-          color: Color.fromARGB(255, 244, 244, 244),
-          padding: EdgeInsets.only(bottom: 8),
-          child: Column(
-            children: widgets
-          )
-        );
+              // GAME LIST CONTROLS:
+              widgets.add(_getControls());
 
-      }
-    ),
-  );
+              // DIRECTION SELECTOR:
+              widgets.add(_getDirectionControls());
+
+              // GAME LIST OR LOADER:
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  widgets.add(Expanded(child: GameList(snapshot.data)));
+                } else {
+                  widgets.add(Expanded(
+                      child: Center(child: Text("Engir leikir fundust ..."))));
+                }
+              } else {
+                widgets.add(Expanded(
+                    child: Center(child: CircularProgressIndicator())));
+              }
+
+              return Container(
+                  color: Color.fromARGB(255, 244, 244, 244),
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Column(children: widgets));
+            }),
+      );
 
   // BUILD CONTROLS ON TOP OF GAME LIST:
   Widget _getControls() {
     return Container(
       padding: EdgeInsets.all(6),
       child: Column(
-        children: <Widget> [
+        children: <Widget>[
           Row(
             children: <Widget>[
               _getControl("Velja greinar", gameListFilteringType.sport),
@@ -195,123 +181,116 @@ class _HomeState extends State<Home> {
     }
 
     return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(2),
-        child: Column(
-          children: <Widget>[
-            Text(
-              label.toUpperCase(),
-              textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 10, color: Colors.grey ),
-            ),
-            RaisedButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => SettingsDialog(
-                  filterType: type,
-                  onSubmit: onSettingsSave, setValues: setValues
+        child: Container(
+            padding: EdgeInsets.all(2),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  label.toUpperCase(),
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 10, color: Colors.grey),
                 ),
-              ),
-              elevation: 0,
-              padding: EdgeInsets.all(5),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child:Text(
-                      boxText,
-                      style: TextStyle(fontSize: 14),
-                    )
+                RaisedButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => SettingsDialog(
+                        filterType: type,
+                        onSubmit: onSettingsSave,
+                        setValues: setValues),
                   ),
-                  Icon(
-                    Icons.edit,
-                    size: 14,
+                  elevation: 0,
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: Text(
+                        boxText,
+                        style: TextStyle(fontSize: 14),
+                      )),
+                      Icon(
+                        Icons.edit,
+                        size: 14,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-
-          ],
-        )
-      )
-    );
+                ),
+              ],
+            )));
   }
 
   // GET DIRECTION CONROLS:
   Widget _getDirectionControls() {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
-      color: Color.fromARGB(255, 190, 190, 190),
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget> [
-
+        margin: EdgeInsets.only(bottom: 8),
+        color: Color.fromARGB(255, 190, 190, 190),
+        child: Container(
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             Expanded(
-              child:FlatButton(
-                onPressed: () {
-                  setState(() { _direction = "onlyfixtures"; });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: (_direction == "onlyfixtures" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
-                    width: 3,
-                  )
-                ),
-                child: Text(
-                  "NÆSTU LEIKIR",
-                  style: TextStyle(
-                    color: (_direction == "onlyfixtures" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
-                  )
-                )
-              )
-            ),
-
+                child: FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        _direction = "onlyfixtures";
+                      });
+                    },
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                      color: (_direction == "onlyfixtures"
+                          ? Color.fromARGB(255, 218, 29, 35)
+                          : Color.fromARGB(255, 190, 190, 190)),
+                      width: 3,
+                    )),
+                    child: Text("NÆSTU LEIKIR",
+                        style: TextStyle(
+                          color: (_direction == "onlyfixtures"
+                              ? Colors.white
+                              : Color.fromARGB(255, 150, 150, 150)),
+                        )))),
             Expanded(
-              child: FlatButton(
-                onPressed: () {
-                  setState(() { _direction = "both"; });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: (_direction == "both" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
-                    width: 3,
-                  )
-                ),
-                child: Text(
-                  "BLANDAÐ",
-                  style: TextStyle(
-                    color: (_direction == "both" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
-                  )
-                )
-              )
-            ),
-
+                child: FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        _direction = "both";
+                      });
+                    },
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                      color: (_direction == "both"
+                          ? Color.fromARGB(255, 218, 29, 35)
+                          : Color.fromARGB(255, 190, 190, 190)),
+                      width: 3,
+                    )),
+                    child: Text("BLANDAÐ",
+                        style: TextStyle(
+                          color: (_direction == "both"
+                              ? Colors.white
+                              : Color.fromARGB(255, 150, 150, 150)),
+                        )))),
             Expanded(
-              child:FlatButton(
-                onPressed: () {
-                  setState(() { _direction = "onlyresults"; });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: (_direction == "onlyresults" ? Color.fromARGB(255, 218, 29, 35) : Color.fromARGB(255, 190, 190, 190)),
-                    width: 3,
-                  )
-                ),
-                child: Text(
-                  "NÝJUSTU ÚRSLIT",
-                  style: TextStyle(
-                    color: (_direction == "onlyresults" ? Colors.white : Color.fromARGB(255, 150, 150, 150)),
-                  )
-                )
-              )
-            ),
-          ]
-        ),
-      )
-    );
+                child: FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        _direction = "onlyresults";
+                      });
+                    },
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                      color: (_direction == "onlyresults"
+                          ? Color.fromARGB(255, 218, 29, 35)
+                          : Color.fromARGB(255, 190, 190, 190)),
+                      width: 3,
+                    )),
+                    child: Text("NÝJUSTU ÚRSLIT",
+                        style: TextStyle(
+                          color: (_direction == "onlyresults"
+                              ? Colors.white
+                              : Color.fromARGB(255, 150, 150, 150)),
+                        )))),
+          ]),
+        ));
   }
 
   // LOAD GAMES FROM API:
@@ -345,5 +324,4 @@ class _HomeState extends State<Home> {
 
     return array;
   }
-
 }
